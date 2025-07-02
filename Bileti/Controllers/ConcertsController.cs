@@ -127,10 +127,12 @@ namespace Bileti.Controllers
                 concert.AvailableTickets--;
                 _context.Update(concert);
                 await _context.SaveChangesAsync();
+
+                TempData["Success"] = "🎉 Congratulations! You successfully bought a ticket.";
             }
             else
             {
-                TempData["Error"] = "Няма налични билети за този концерт.";
+                TempData["Error"] = "❌ Няма налични билети за този концерт.";
             }
 
             return RedirectToAction(nameof(Index));
