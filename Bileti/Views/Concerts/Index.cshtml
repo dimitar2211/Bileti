@@ -1,0 +1,56 @@
+﻿@model IEnumerable<Bileti.Models.Concert>
+
+@{
+    ViewData["Title"] = "Концерти";
+}
+
+<h2>Концерти</h2>
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["Error"]
+    </div>
+}
+
+<p>
+    <a class="btn btn-primary" asp-action="Create">Създай нов концерт</a>
+</p>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Име</th>
+            <th>Локация</th>
+            <th>Начална дата</th>
+            <th>Крайна дата</th>
+            <th>Налични билети</th>
+            <th>Действия</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Name</td>
+                <td>@item.Location</td>
+                <td>@item.StartDate.ToShortDateString()</td>
+                <td>@item.EndDate.ToShortDateString()</td>
+                <td>@item.AvailableTickets</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+
+                    @using (Html.BeginForm("Buy", "Concerts", new { id = item.Id }, FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+                        <input type="submit" value="Buy" class="btn btn-sm btn-success"
+                        @(item.AvailableTickets == 0 ? "disabled title='Разпродаден'" : "") />
+                    }
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
