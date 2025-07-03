@@ -20,8 +20,34 @@ namespace Bileti.Controllers
         // GET: Concerts
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Concerts.ToListAsync());
+            var concerts = await _context.Concerts.ToListAsync();
+
+            // Вземи най-новото LastPurchaseAt сред всички концерти
+            var lastPurchase = concerts
+                .Where(c => c.LastPurchaseAt.HasValue)
+                .OrderByDescending(c => c.LastPurchaseAt)
+                .FirstOrDefault();
+
+            if (lastPurchase != null && lastPurchase.LastPurchaseAt.HasValue)
+            {
+                var timePassed = DateTime.UtcNow - lastPurchase.LastPurchaseAt.Value;
+
+                string message = timePassed.TotalSeconds < 60
+                    ? $"Последният билет е купен преди {timePassed.Seconds} секунди."
+                    : timePassed.TotalMinutes < 60
+                        ? $"Последният билет е купен преди {timePassed.Minutes} минути."
+                        : $"Последният билет е купен преди {timePassed.Hours} часа.";
+
+                ViewData["LastPurchaseMessage"] = message;
+            }
+            else
+            {
+                ViewData["LastPurchaseMessage"] = "Все още няма закупени билети.";
+            }
+
+            return View(concerts);
         }
+
 
         // GET: Concerts/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -125,14 +151,15 @@ namespace Bileti.Controllers
             if (concert.AvailableTickets > 0)
             {
                 concert.AvailableTickets--;
+                concert.LastPurchaseAt = DateTime.UtcNow;  // Обновяваме времето на последна покупка
                 _context.Update(concert);
                 await _context.SaveChangesAsync();
 
-                TempData["Success"] = "🎉 Congratulations! You successfully bought a ticket.";
+                TempData["Success"] = "🎉 Успешно закупихте билет!";
             }
             else
             {
-                TempData["Error"] = "❌ Няма налични билети за този концерт.";
+                TempData["Error"] = "❌ Няма налични билети.";
             }
 
             return RedirectToAction(nameof(Index));

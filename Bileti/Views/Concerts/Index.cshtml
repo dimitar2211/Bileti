@@ -18,6 +18,12 @@
         @TempData["Error"]
     </div>
 }
+@if (ViewData["LastPurchaseMessage"] != null)
+{
+    <div class="alert alert-info mt-3">
+        @ViewData["LastPurchaseMessage"]
+    </div>
+}
 
 <p>
     <a class="btn btn-primary" asp-action="Create">Създай нов концерт</a>

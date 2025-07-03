@@ -23,6 +23,8 @@ namespace Bileti.Models
         [Required]
         [Range(0, int.MaxValue)]
         public int AvailableTickets { get; set; }
+        public DateTime? LastPurchaseAt { get; set; }  // <-- Ново поле, nullable
+
     }
 
 }
