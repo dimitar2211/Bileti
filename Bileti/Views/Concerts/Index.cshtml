@@ -58,7 +58,7 @@
                     {
                         @Html.AntiForgeryToken()
                         <input type="submit" value="Buy" class="btn btn-sm btn-success"
-                        @(item.AvailableTickets == 0 ? "disabled title='Разпродаден'" : "") />
+                        @(item.AvailableTickets == 0 ? "disabled title='No tickets left'" : "") />
                     }
 
                 </td>

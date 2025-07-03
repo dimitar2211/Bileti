@@ -33,10 +33,10 @@ namespace Bileti.Controllers
                 var timePassed = DateTime.UtcNow - lastPurchase.LastPurchaseAt.Value;
 
                 string message = timePassed.TotalSeconds < 60
-                    ? $"Last ticket was bought {timePassed.Seconds} ago."
+                    ? $"Last ticket was bought {timePassed.Seconds} seconds/s ago."
                     : timePassed.TotalMinutes < 60
-                        ? $"Last ticket was bought {timePassed.Minutes} ago."
-                        : $"Last ticket was bought {timePassed.Hours} ago.";
+                        ? $"Last ticket was bought {timePassed.Minutes} minute/s ago."
+                        : $"Last ticket was bought {timePassed.Hours} hour/s ago.";
 
                 ViewData["LastPurchaseMessage"] = message;
             }
@@ -151,8 +151,17 @@ namespace Bileti.Controllers
             if (concert.AvailableTickets > 0)
             {
                 concert.AvailableTickets--;
-                concert.LastPurchaseAt = DateTime.UtcNow;  
-                _context.Update(concert);
+                concert.LastPurchaseAt = DateTime.UtcNow;
+
+                if (concert.AvailableTickets == 0)
+                {
+                    _context.Concerts.Remove(concert);
+                }
+                else
+                {
+                    _context.Concerts.Update(concert);
+                }
+
                 await _context.SaveChangesAsync();
 
                 TempData["Success"] = "You bought a ticket! :)";
