@@ -29,40 +29,48 @@
     <a class="btn btn-primary" asp-action="Create">Create new concert</a>
 </p>
 
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Location</th>
-            <th>Start date</th>
-            <th>End date</th>
-            <th>Available Tickets</th>
-            <th>Action</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
+@if (!Model.Any())
+{
+    <div class="alert alert-warning">
+        No available tickets.
+    </div>
+}
+else
+{
+    <table class="table table-bordered">
+        <thead>
             <tr>
-                <td>@item.Name</td>
-                <td>@item.Location</td>
-                <td>@item.StartDate.ToShortDateString()</td>
-                <td>@item.EndDate.ToShortDateString()</td>
-                <td>@item.AvailableTickets</td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-
-                    @using (Html.BeginForm("Buy", "Concerts", new { id = item.Id }, FormMethod.Post))
-                    {
-                        @Html.AntiForgeryToken()
-                        <input type="submit" value="Buy" class="btn btn-sm btn-success"
-                        @(item.AvailableTickets == 0 ? "disabled title='No tickets left'" : "") />
-                    }
-
-                </td>
+                <th>Name</th>
+                <th>Location</th>
+                <th>Start date</th>
+                <th>End date</th>
+                <th>Available Tickets</th>
+                <th>Action</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    <td>@item.Location</td>
+                    <td>@item.StartDate.ToShortDateString()</td>
+                    <td>@item.EndDate.ToShortDateString()</td>
+                    <td>@item.AvailableTickets</td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+
+                        @using (Html.BeginForm("Buy", "Concerts", new { id = item.Id }, FormMethod.Post))
+                        {
+                            @Html.AntiForgeryToken()
+                            <input type="submit" value="Buy" class="btn btn-sm btn-success"
+                            @(item.AvailableTickets == 0 ? "disabled title='No tickets left'" : "") />
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
