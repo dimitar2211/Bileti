@@ -1,12 +1,15 @@
 ﻿using Bileti.Data;
 using Bileti.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
+using System.Security.Claims;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Bileti.Controllers
 {
+    [Authorize]
     public class SongsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -19,11 +22,14 @@ namespace Bileti.Controllers
         // GET: /Songs
         public IActionResult Index()
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
             var tracks = _context.Songs
+                .Where(s => s.UserId == userId)
                 .Select(s => s.SpotifyTrackId)
                 .ToList();
 
-            return View(tracks); // Връща List<string> с track IDs към View
+            return View(tracks);
         }
 
         // POST: /Songs/AddSong
@@ -37,34 +43,27 @@ namespace Bileti.Controllers
             if (trackId == null)
                 return RedirectToAction("Index");
 
-            // Проверява дали вече съществува track с този ID
-            if (!_context.Songs.Any(s => s.SpotifyTrackId == trackId))
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (!_context.Songs.Any(s => s.SpotifyTrackId == trackId && s.UserId == userId))
             {
-                _context.Songs.Add(new Song { SpotifyTrackId = trackId });
+                _context.Songs.Add(new Song { SpotifyTrackId = trackId, UserId = userId });
                 await _context.SaveChangesAsync();
             }
 
             return RedirectToAction("Index");
         }
 
-        // Извлича track ID от Spotify линка (например: "4uLU6hMCjMI75M1A2tKUQC")
-        private string ExtractSpotifyTrackId(string url)
-        {
-            var match = Regex.Match(url, @"spotify\.com/track/([a-zA-Z0-9]+)");
-            if (match.Success)
-                return match.Groups[1].Value;
-
-            return null;
-        }
-
-
+        // POST: /Songs/DeleteSong
         [HttpPost]
         public async Task<IActionResult> DeleteSong(string spotifyTrackId)
         {
             if (string.IsNullOrEmpty(spotifyTrackId))
                 return RedirectToAction("Index");
 
-            var song = _context.Songs.FirstOrDefault(s => s.SpotifyTrackId == spotifyTrackId);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var song = _context.Songs.FirstOrDefault(s => s.SpotifyTrackId == spotifyTrackId && s.UserId == userId);
             if (song != null)
             {
                 _context.Songs.Remove(song);
@@ -74,6 +73,15 @@ namespace Bileti.Controllers
             return RedirectToAction("Index");
         }
 
+        // Помощен метод за извличане на track ID от Spotify URL
+        private string ExtractSpotifyTrackId(string url)
+        {
+            var match = Regex.Match(url, @"spotify\.com/track/([a-zA-Z0-9]+)");
+            if (match.Success)
+                return match.Groups[1].Value;
+
+            return null;
+        }
     }
 }
 
