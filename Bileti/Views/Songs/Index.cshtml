@@ -66,7 +66,7 @@
         background-color: #282828;
         border-radius: 12px;
         padding: 1rem;
-        width: 500px; /* увеличена ширина */
+        width: 500px; 
         box-shadow: 0 4px 15px rgba(29, 185, 84, 0.5);
         display: flex;
         flex-direction: column;
@@ -75,7 +75,7 @@
     }
 
     iframe.spotify-player {
-        width: 480px; /* увеличена ширина */
+        width: 480px; 
         height: 80px;
         border-radius: 12px;
         box-shadow: 0 0 20px #1DB954;
@@ -108,16 +108,16 @@
     }
 </style>
 
-<h2>Добави Spotify песен</h2>
+<h2>Add song through Spotify</h2>
 
 <form method="post" asp-action="AddSong" asp-controller="Songs" autocomplete="off">
-    <input type="text" name="spotifyLink" placeholder="Постави Spotify линк" />
-    <button type="submit">Добави</button>
+    <input type="text" name="spotifyLink" placeholder="Paste Spotify link" />
+    <button type="submit">Add</button>
 </form>
 
 @if (!Model.Any())
 {
-    <p class="no-songs-message">Няма добавени песни.</p>
+    <p class="no-songs-message">No songs were added</p>
 }
 else
 {
@@ -130,7 +130,7 @@ else
 
                 <form method="post" asp-action="DeleteSong" asp-controller="Songs" style="margin:0;">
                     <input type="hidden" name="spotifyTrackId" value="@trackId" />
-                    <button type="submit" class="btn-delete">Изтрий</button>
+                    <button type="submit" class="btn-delete">Delete</button>
                 </form>
             </div>
         }

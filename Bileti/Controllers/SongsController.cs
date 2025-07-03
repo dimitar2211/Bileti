@@ -73,7 +73,6 @@ namespace Bileti.Controllers
             return RedirectToAction("Index");
         }
 
-        // Помощен метод за извличане на track ID от Spotify URL
         private string ExtractSpotifyTrackId(string url)
         {
             var match = Regex.Match(url, @"spotify\.com/track/([a-zA-Z0-9]+)");
