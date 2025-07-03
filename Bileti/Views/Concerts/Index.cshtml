@@ -1,10 +1,10 @@
 ﻿@model IEnumerable<Bileti.Models.Concert>
 
 @{
-    ViewData["Title"] = "Концерти";
+    ViewData["Title"] = "Concerts";
 }
 
-<h2>Концерти</h2>
+<h2>Concerts</h2>
 
 @if (TempData["Success"] != null)
 {
@@ -26,18 +26,18 @@
 }
 
 <p>
-    <a class="btn btn-primary" asp-action="Create">Създай нов концерт</a>
+    <a class="btn btn-primary" asp-action="Create">Create new concert</a>
 </p>
 
 <table class="table table-bordered">
     <thead>
         <tr>
-            <th>Име</th>
-            <th>Локация</th>
-            <th>Начална дата</th>
-            <th>Крайна дата</th>
-            <th>Налични билети</th>
-            <th>Действия</th>
+            <th>Name</th>
+            <th>Location</th>
+            <th>Start date</th>
+            <th>End date</th>
+            <th>Available Tickets</th>
+            <th>Action</th>
         </tr>
     </thead>
     <tbody>

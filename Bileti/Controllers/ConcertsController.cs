@@ -33,16 +33,16 @@ namespace Bileti.Controllers
                 var timePassed = DateTime.UtcNow - lastPurchase.LastPurchaseAt.Value;
 
                 string message = timePassed.TotalSeconds < 60
-                    ? $"Последният билет е купен преди {timePassed.Seconds} секунди."
+                    ? $"Last ticket was bought {timePassed.Seconds} ago."
                     : timePassed.TotalMinutes < 60
-                        ? $"Последният билет е купен преди {timePassed.Minutes} минути."
-                        : $"Последният билет е купен преди {timePassed.Hours} часа.";
+                        ? $"Last ticket was bought {timePassed.Minutes} ago."
+                        : $"Last ticket was bought {timePassed.Hours} ago.";
 
                 ViewData["LastPurchaseMessage"] = message;
             }
             else
             {
-                ViewData["LastPurchaseMessage"] = "Все още няма закупени билети.";
+                ViewData["LastPurchaseMessage"] = "Nobody has purchased a ticket yet.";
             }
 
             return View(concerts);
@@ -151,15 +151,15 @@ namespace Bileti.Controllers
             if (concert.AvailableTickets > 0)
             {
                 concert.AvailableTickets--;
-                concert.LastPurchaseAt = DateTime.UtcNow;  // Обновяваме времето на последна покупка
+                concert.LastPurchaseAt = DateTime.UtcNow;  
                 _context.Update(concert);
                 await _context.SaveChangesAsync();
 
-                TempData["Success"] = "🎉 Успешно закупихте билет!";
+                TempData["Success"] = "You bought a ticket! :)";
             }
             else
             {
-                TempData["Error"] = "❌ Няма налични билети.";
+                TempData["Error"] = "No available ticket :(";
             }
 
             return RedirectToAction(nameof(Index));
