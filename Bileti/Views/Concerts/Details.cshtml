@@ -31,15 +31,17 @@
         margin-bottom: 25px;
     }
 
-    dt.col-sm-2 {
+    dt {
         color: #1ed760;
         font-weight: 700;
+        margin-top: 10px;
     }
 
-    dd.col-sm-10 {
-        margin-left: 0;
-        padding-left: 10px;
+    dd {
         color: #ddd;
+        margin-left: 0;
+        padding-left: 0;
+        margin-bottom: 10px;
     }
 
     a {
@@ -58,6 +60,10 @@
         max-width: 520px;
         margin-top: 40px;
     }
+
+    .action-buttons {
+        margin-top: 20px;
+    }
 </style>
 
 <div class="container container-details">
@@ -66,44 +72,37 @@
     <h4>Concert</h4>
     <hr />
     <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
+        <dt>Name</dt>
+        <dd>@Model.Name</dd>
 
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Location)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Location)
-        </dd>
+        <dt>Location</dt>
+        <dd>@Model.Location</dd>
 
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.StartDate)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.StartDate)
-        </dd>
+        <dt>Start Date</dt>
+        <dd>@Model.StartDate.ToString("dd.MM.yyyy HH:mm")</dd>
 
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.EndDate)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.EndDate)
-        </dd>
+        <dt>End Date</dt>
+        <dd>@Model.EndDate.ToString("dd.MM.yyyy HH:mm")</dd>
 
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.AvailableTickets)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.AvailableTickets)
+        <dt>Available Tickets</dt>
+        <dd>
+            @if (Model.AvailableTickets > 0)
+            {
+                @Model.AvailableTickets
+            }
+            else
+            {
+                <span style="color: #ff4d4d; font-weight: bold;">Sold out</span>
+            }
         </dd>
     </dl>
 
-    <div>
-        <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+    <div class="action-buttons">
+        @if (User.IsInRole("Admin"))
+        {
+            <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a>
+            <a asp-action="Delete" asp-route-id="@Model?.Id">Delete</a>
+        }
         <a asp-action="Index">Back to List</a>
     </div>
 </div>

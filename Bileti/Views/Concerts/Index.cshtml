@@ -124,17 +124,21 @@
     }
     @if (ViewData["LastPurchaseMessage"] != null)
     {
-        <div class="alert alert-info mt-3"> @ViewData["LastPurchaseMessage"]</div>
+        <div class="alert alert-info mt-3">@ViewData["LastPurchaseMessage"]</div>
     }
 
-    <p class="mt-4">
-        <a class="btn btn-primary" asp-action="Create">Create new concert</a>
-    </p>
+    @* Бутона за създаване само за Admin *@
+    @if (User.IsInRole("Admin"))
+    {
+        <p class="mt-4">
+            <a class="btn btn-primary" asp-action="Create">Create new concert</a>
+        </p>
+    }
 
     @if (!Model.Any())
     {
         <div class="no-tickets">
-             No available tickets at the moment.
+            No available tickets at the moment.
         </div>
     }
     else
@@ -161,15 +165,24 @@
                             <td>@item.EndDate.ToShortDateString()</td>
                             <td>@item.AvailableTickets</td>
                             <td>
-                                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info">Details</a>
 
-                                @using (Html.BeginForm("Buy", "Concerts", new { id = item.Id }, FormMethod.Post))
+                                @* Админ бутони *@
+                                @if (User.IsInRole("Admin"))
                                 {
-                                    @Html.AntiForgeryToken()
-                                    <input type="submit" value="Buy" class="btn btn-sm btn-success mt-1"
-                                    @(item.AvailableTickets == 0 ? "disabled title='No tickets left'" : "") />
+                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning ms-1">Edit</a>
+                                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger ms-1">Delete</a>
+                                }
+                                else
+                                {
+                                    @using (Html.BeginForm("Buy", "Concerts", new { id = item.Id }, FormMethod.Post))
+                                    {
+                                        @Html.AntiForgeryToken()
+                                        <input type="submit"
+                                               value="Buy"
+                                               class="btn btn-sm btn-success ms-1"
+                                        @(item.AvailableTickets == 0 ? "disabled title='No tickets left'" : "") />
+                                    }
                                 }
                             </td>
                         </tr>

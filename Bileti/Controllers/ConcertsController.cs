@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Bileti.Data;
@@ -22,7 +23,6 @@ namespace Bileti.Controllers
         {
             var concerts = await _context.Concerts.ToListAsync();
 
-            // Вземи най-новото LastPurchaseAt сред всички концерти
             var lastPurchase = concerts
                 .Where(c => c.LastPurchaseAt.HasValue)
                 .OrderByDescending(c => c.LastPurchaseAt)
@@ -33,10 +33,10 @@ namespace Bileti.Controllers
                 var timePassed = DateTime.UtcNow - lastPurchase.LastPurchaseAt.Value;
 
                 string message = timePassed.TotalSeconds < 60
-                    ? $"Last ticket was bought {timePassed.Seconds} seconds/s ago."
+                    ? $"Last ticket was bought {timePassed.Seconds} seconds ago."
                     : timePassed.TotalMinutes < 60
-                        ? $"Last ticket was bought {timePassed.Minutes} minute/s ago."
-                        : $"Last ticket was bought {timePassed.Hours} hour/s ago.";
+                        ? $"Last ticket was bought {timePassed.Minutes} minutes ago."
+                        : $"Last ticket was bought {timePassed.Hours} hours ago.";
 
                 ViewData["LastPurchaseMessage"] = message;
             }
@@ -47,7 +47,6 @@ namespace Bileti.Controllers
 
             return View(concerts);
         }
-
 
         // GET: Concerts/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -61,6 +60,7 @@ namespace Bileti.Controllers
         }
 
         // GET: Concerts/Create
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             return View();
@@ -69,6 +69,7 @@ namespace Bileti.Controllers
         // POST: Concerts/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create([Bind("Id,Name,Location,StartDate,EndDate,AvailableTickets")] Concert concert)
         {
             if (ModelState.IsValid)
@@ -81,6 +82,7 @@ namespace Bileti.Controllers
         }
 
         // GET: Concerts/Edit/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null) return NotFound();
@@ -94,6 +96,7 @@ namespace Bileti.Controllers
         // POST: Concerts/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Location,StartDate,EndDate,AvailableTickets")] Concert concert)
         {
             if (id != concert.Id) return NotFound();
@@ -116,6 +119,7 @@ namespace Bileti.Controllers
         }
 
         // GET: Concerts/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null) return NotFound();
@@ -129,6 +133,7 @@ namespace Bileti.Controllers
         // POST: Concerts/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var concert = await _context.Concerts.FindAsync(id);
@@ -163,7 +168,6 @@ namespace Bileti.Controllers
                 }
 
                 await _context.SaveChangesAsync();
-
                 TempData["Success"] = "You bought a ticket! :)";
             }
             else
