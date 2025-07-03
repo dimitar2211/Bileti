@@ -2,75 +2,176 @@
 
 @{
     ViewData["Title"] = "Concerts";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Concerts</h2>
+<style>
+    body {
+        background-color: #121212;
+        color: #fff;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
 
-@if (TempData["Success"] != null)
-{
-    <div class="alert alert-success">
-        @TempData["Success"]
-    </div>
-}
-@if (TempData["Error"] != null)
-{
-    <div class="alert alert-danger">
-        @TempData["Error"]
-    </div>
-}
-@if (ViewData["LastPurchaseMessage"] != null)
-{
-    <div class="alert alert-info mt-3">
-        @ViewData["LastPurchaseMessage"]
-    </div>
-}
+    h2 {
+        color: #1db954;
+        margin-top: 30px;
+    }
 
-<p>
-    <a class="btn btn-primary" asp-action="Create">Create new concert</a>
-</p>
+    .alert {
+        border-radius: 10px;
+        padding: 15px;
+        font-weight: bold;
+        font-size: 1.1rem;
+    }
 
-@if (!Model.Any())
-{
-    <div class="alert alert-warning">
-        No available tickets.
-    </div>
-}
-else
-{
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Location</th>
-                <th>Start date</th>
-                <th>End date</th>
-                <th>Available Tickets</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>@item.Name</td>
-                    <td>@item.Location</td>
-                    <td>@item.StartDate.ToShortDateString()</td>
-                    <td>@item.EndDate.ToShortDateString()</td>
-                    <td>@item.AvailableTickets</td>
-                    <td>
-                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+    .alert-success {
+        background-color: #1db954;
+        color: #000;
+    }
 
-                        @using (Html.BeginForm("Buy", "Concerts", new { id = item.Id }, FormMethod.Post))
-                        {
-                            @Html.AntiForgeryToken()
-                            <input type="submit" value="Buy" class="btn btn-sm btn-success"
-                            @(item.AvailableTickets == 0 ? "disabled title='No tickets left'" : "") />
-                        }
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
+    .alert-danger {
+        background-color: #ff4d4d;
+        color: #000;
+    }
+
+    .alert-info {
+        background-color: #1db954;
+        color: #000;
+    }
+
+    .table-container {
+        margin-top: 30px;
+        background-color: #1e1e1e;
+        border-radius: 15px;
+        padding: 20px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    thead tr {
+        background-color: #1db954;
+        color: #000;
+        border-bottom: 2px solid #1db954; /* зелена линия под хедърите */
+    }
+
+    table th, table td {
+        color: #ffffff;
+        border: 1px solid #1db954;
+        padding: 12px;
+        text-align: left;
+    }
+
+    .btn-primary {
+        background-color: #1db954;
+        border-color: #1db954;
+    }
+
+        .btn-primary:hover {
+            background-color: #1ed760;
+            border-color: #1ed760;
+        }
+
+    .btn-success {
+        background-color: #1db954;
+        border-color: #1db954;
+        color: #000;
+    }
+
+        .btn-success[disabled] {
+            background-color: #444 !important;
+            border-color: #444 !important;
+            color: #aaa;
+        }
+
+    .no-tickets {
+        margin-top: 40px;
+        background-color: #2a2a2a;
+        padding: 20px;
+        border-radius: 10px;
+        color: #ddd;
+        text-align: center;
+        font-size: 1.2rem;
+    }
+
+    a {
+        color: #1db954;
+        text-decoration: none;
+    }
+
+        a:hover {
+            text-decoration: underline;
+        }
+</style>
+
+<div class="container">
+    <h2>🎶 Upcoming Concerts</h2>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success mt-3">✅ @TempData["Success"]</div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger mt-3">❌ @TempData["Error"]</div>
+    }
+    @if (ViewData["LastPurchaseMessage"] != null)
+    {
+        <div class="alert alert-info mt-3">🕒 @ViewData["LastPurchaseMessage"]</div>
+    }
+
+    <p class="mt-4">
+        <a class="btn btn-primary" asp-action="Create">➕ Create new concert</a>
+    </p>
+
+    @if (!Model.Any())
+    {
+        <div class="no-tickets">
+            😔 No available tickets at the moment.
+        </div>
+    }
+    else
+    {
+        <div class="table-container">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Location</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Available Tickets</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.Name</td>
+                            <td>@item.Location</td>
+                            <td>@item.StartDate.ToShortDateString()</td>
+                            <td>@item.EndDate.ToShortDateString()</td>
+                            <td>@item.AvailableTickets</td>
+                            <td>
+                                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+
+                                @using (Html.BeginForm("Buy", "Concerts", new { id = item.Id }, FormMethod.Post))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    <input type="submit" value="Buy" class="btn btn-sm btn-success mt-1"
+                                    @(item.AvailableTickets == 0 ? "disabled title='No tickets left'" : "") />
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
