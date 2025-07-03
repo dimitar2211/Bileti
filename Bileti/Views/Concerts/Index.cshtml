@@ -22,21 +22,25 @@
         padding: 15px;
         font-weight: bold;
         font-size: 1.1rem;
+        border: 2px solid transparent; /* по подразбиране прозрачен бордър */
     }
 
     .alert-success {
         background-color: #1db954;
         color: #000;
+        border-color: #1db954;
     }
 
     .alert-danger {
         background-color: #ff4d4d;
         color: #000;
+        border-color: #ff4d4d;
     }
 
     .alert-info {
         background-color: #1db954;
         color: #000;
+        border-color: #1db954; /* зелено очертание */
     }
 
     .table-container {
@@ -55,7 +59,7 @@
     thead tr {
         background-color: #1db954;
         color: #000;
-        border-bottom: 2px solid #1db954; /* зелена линия под хедърите */
+        border-bottom: 2px solid #1db954;
     }
 
     table th, table td {
@@ -108,7 +112,7 @@
 </style>
 
 <div class="container">
-    <h2>🎶 Upcoming Concerts</h2>
+    <h2>Upcoming Concerts</h2>
 
     @if (TempData["Success"] != null)
     {
@@ -120,17 +124,17 @@
     }
     @if (ViewData["LastPurchaseMessage"] != null)
     {
-        <div class="alert alert-info mt-3">🕒 @ViewData["LastPurchaseMessage"]</div>
+        <div class="alert alert-info mt-3"> @ViewData["LastPurchaseMessage"]</div>
     }
 
     <p class="mt-4">
-        <a class="btn btn-primary" asp-action="Create">➕ Create new concert</a>
+        <a class="btn btn-primary" asp-action="Create">Create new concert</a>
     </p>
 
     @if (!Model.Any())
     {
         <div class="no-tickets">
-            😔 No available tickets at the moment.
+             No available tickets at the moment.
         </div>
     }
     else
