@@ -1,8 +1,91 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
+﻿<style>
+    body {
+        background-color: #121212;
+        color: #ffffff;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    .hero {
+        padding: 100px 20px;
+        background: linear-gradient(135deg, #1db954, #191414);
+        border-radius: 20px;
+        text-align: center;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+    }
+
+    .hero h1 {
+        font-size: 3rem;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+
+    .hero p {
+        font-size: 1.3rem;
+        color: #d1d1d1;
+    }
+
+    .features {
+        margin-top: 60px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 30px;
+    }
+
+    .feature-card {
+        background-color: #1e1e1e;
+        padding: 30px;
+        border-radius: 15px;
+        text-align: center;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+        transition: transform 0.2s ease;
+    }
+
+    .feature-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .feature-card h3 {
+        color: #1db954;
+    }
+
+    .feature-card p {
+        color: #ccc;
+    }
+
+    a.btn-primary {
+        background-color: #1db954;
+        border-color: #1db954;
+    }
+
+    a.btn-primary:hover {
+        background-color: #1ed760;
+        border-color: #1ed760;
+    }
+</style>
+
+<div class="container">
+    <div class="hero">
+        <h1>Welcome to Bileti</h1>
+        <p>Your ultimate platform for discovering concerts and buying tickets in real time.</p>
+        <a href="/Concerts" class="btn btn-primary btn-lg mt-4">Browse Concerts</a>
+    </div>
+
+    <div class="features mt-5">
+        <div class="feature-card">
+            <h3>🎟 Buy Tickets</h3>
+            <p>Find concerts you love and purchase tickets instantly.</p>
+        </div>
+        <div class="feature-card">
+            <h3>🕒 Live Updates</h3>
+            <p>See when someone last bought a ticket – stay in the loop.</p>
+        </div>
+        <div class="feature-card">
+            <h3>⚡ Auto Management</h3>
+            <p>Tickets are automatically removed when sold out.</p>
+        </div>
+        <div class="feature-card">
+            <h3>📈 Admin Panel</h3>
+            <p>Manage concerts, edit details and track availability.</p>
+        </div>
+    </div>
 </div>
