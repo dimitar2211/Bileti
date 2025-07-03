@@ -1,14 +1,15 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Bileti.Data;
+using Bileti.Data; // ???? namespace ?? ApplicationDbContext
 using Microsoft.AspNetCore.Identity.UI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Връзка към базата данни
+// ?????? ??? ?????? ????? (?? appsettings.json)
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
     ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
+// ???????? ?? ApplicationDbContext ? Entity Framework ? SQL Server
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString, sqlOptions =>
         sqlOptions.EnableRetryOnFailure())
@@ -16,15 +17,12 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-// Ако имаш EmailSender, регистрирай го тук, ако нямаш - махни този ред
-// builder.Services.AddTransient<IEmailSender, EmailSender>();
-
-// Identity конфигурация
+// Identity ????????????
 builder.Services.AddDefaultIdentity<IdentityUser>(options =>
 {
-    options.SignIn.RequireConfirmedAccount = false; // Сложи true, ако искаш имейл потвърждение
+    options.SignIn.RequireConfirmedAccount = false; // ????? ?? ?????? true ?? email ????????????
 })
-.AddRoles<IdentityRole>()  // Добавяме роли
+.AddRoles<IdentityRole>()
 .AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddControllersWithViews();
@@ -32,7 +30,7 @@ builder.Services.AddRazorPages();
 
 var app = builder.Build();
 
-// Създаване на роли и админ акаунт - извикваме синхронно асинхронен метод
+// ????????? ?? ???? ? ???????????????? ??????
 CreateRolesAndAdminUser(app.Services).GetAwaiter().GetResult();
 
 if (app.Environment.IsDevelopment())
@@ -50,7 +48,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseAuthentication();  // Трябва да е преди UseAuthorization
+app.UseAuthentication(); // ?????? ?? ? ????? UseAuthorization
 app.UseAuthorization();
 
 app.MapControllerRoute(
@@ -61,7 +59,7 @@ app.MapRazorPages();
 
 app.Run();
 
-// Асинхронен метод за създаване на роли и админ акаунт
+// ?????????? ????? ?? ????????? ?? ???? ? ????? ??????????
 async Task CreateRolesAndAdminUser(IServiceProvider serviceProvider)
 {
     using var scope = serviceProvider.CreateScope();
@@ -75,7 +73,7 @@ async Task CreateRolesAndAdminUser(IServiceProvider serviceProvider)
 
     string adminRole = "Admin";
     string adminEmail = "admin@bileti.bg";
-    string adminPassword = "Admin123!"; // Винаги използвай по-сигурна парола в реални приложения
+    string adminPassword = "Admin123!";
 
     if (!await roleManager.RoleExistsAsync(adminRole))
     {

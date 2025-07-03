@@ -13,16 +13,16 @@
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
     }
 
-    .hero h1 {
-        font-size: 3rem;
-        font-weight: bold;
-        margin-bottom: 20px;
-    }
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
 
-    .hero p {
-        font-size: 1.3rem;
-        color: #d1d1d1;
-    }
+        .hero p {
+            font-size: 1.3rem;
+            color: #d1d1d1;
+        }
 
     .features {
         margin-top: 60px;
@@ -40,26 +40,46 @@
         transition: transform 0.2s ease;
     }
 
-    .feature-card:hover {
-        transform: translateY(-5px);
-    }
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
 
-    .feature-card h3 {
-        color: #1db954;
-    }
+        .feature-card h3 {
+            color: #1db954;
+        }
 
-    .feature-card p {
-        color: #ccc;
-    }
+        .feature-card p {
+            color: #ccc;
+        }
 
     a.btn-primary {
         background-color: #1db954;
         border-color: #1db954;
+        color: black;
+        font-weight: 700;
+        padding: 0.75rem 2rem;
+        border-radius: 30px;
+        text-decoration: none;
+        display: inline-block;
+        transition: background-color 0.3s ease;
     }
 
-    a.btn-primary:hover {
-        background-color: #1ed760;
-        border-color: #1ed760;
+        a.btn-primary:hover {
+            background-color: #1ed760;
+            border-color: #1ed760;
+            color: black;
+        }
+
+    .mt-3 {
+        margin-top: 1rem;
+    }
+
+    .mt-4 {
+        margin-top: 1.5rem;
+    }
+
+    .mt-5 {
+        margin-top: 3rem;
     }
 </style>
 
@@ -67,7 +87,9 @@
     <div class="hero">
         <h1>Welcome to Bileti</h1>
         <p>Your ultimate platform for discovering concerts and buying tickets in real time.</p>
+
         <a href="/Concerts" class="btn btn-primary btn-lg mt-4">Browse Concerts</a>
+        <a href="/Songs" class="btn btn-primary btn-lg mt-3">Spotify Songs</a>
     </div>
 
     <div class="features mt-5">

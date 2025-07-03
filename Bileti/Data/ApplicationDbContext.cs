@@ -11,5 +11,7 @@ public class ApplicationDbContext : IdentityDbContext
     {
     }
     public DbSet<Concert> Concerts { get; set; }
+    public DbSet<Song> Songs { get; set; }
+
 
 }
