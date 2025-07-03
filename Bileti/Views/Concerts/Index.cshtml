@@ -165,26 +165,22 @@
                             <td>@item.EndDate.ToShortDateString()</td>
                             <td>@item.AvailableTickets</td>
                             <td>
-                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info">Details</a>
-
-                                @* Админ бутони *@
                                 @if (User.IsInRole("Admin"))
                                 {
-                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning ms-1">Edit</a>
-                                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger ms-1">Delete</a>
+                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Edit</a>
+                                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Delete</a>
                                 }
-                                else
+
+                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-success">Details</a>
+
+                                @using (Html.BeginForm("Buy", "Concerts", new { id = item.Id }, FormMethod.Post))
                                 {
-                                    @using (Html.BeginForm("Buy", "Concerts", new { id = item.Id }, FormMethod.Post))
-                                    {
-                                        @Html.AntiForgeryToken()
-                                        <input type="submit"
-                                               value="Buy"
-                                               class="btn btn-sm btn-success ms-1"
-                                        @(item.AvailableTickets == 0 ? "disabled title='No tickets left'" : "") />
-                                    }
+                                    @Html.AntiForgeryToken()
+                                    <input type="submit" value="Buy" class="btn btn-sm btn-success mt-1"
+                                    @(item.AvailableTickets == 0 ? "disabled title='No tickets left'" : "") />
                                 }
                             </td>
+
                         </tr>
                     }
                 </tbody>
