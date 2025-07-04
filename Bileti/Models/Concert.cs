@@ -7,10 +7,10 @@ namespace Bileti.Models
         public int Id { get; set; }
 
         [Required]
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         [Required]
-        public string Location { get; set; }
+        public string? Location { get; set; }
 
         [Required]
         [DataType(DataType.Date)]

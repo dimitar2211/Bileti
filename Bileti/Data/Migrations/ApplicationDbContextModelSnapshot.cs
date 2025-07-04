@@ -52,7 +52,7 @@ namespace Bileti.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Concerts");
+                    b.ToTable("Concerts", (string)null);
                 });
 
             modelBuilder.Entity("Bileti.Models.Song", b =>
@@ -73,7 +73,7 @@ namespace Bileti.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Songs");
+                    b.ToTable("Songs", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

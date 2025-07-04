@@ -1,0 +1,169 @@
+﻿@inject SignInManager<IdentityUser> SignInManager
+@{
+    var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
+}
+
+<style>
+    body {
+        background-color: #121212;
+        color: #fff;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    h2 {
+        color: #1db954;
+        margin-top: 30px;
+    }
+
+    .alert {
+        border-radius: 10px;
+        padding: 15px;
+        font-weight: bold;
+        font-size: 1.1rem;
+        border: 2px solid transparent;
+    }
+
+    .alert-success {
+        background-color: #1db954;
+        color: #000;
+        border-color: #1db954;
+    }
+
+    .alert-danger {
+        background-color: #ff4d4d;
+        color: #000;
+        border-color: #ff4d4d;
+    }
+
+    .alert-info {
+        background-color: #1db954;
+        color: #000;
+        border-color: #1db954;
+    }
+
+    .table-container {
+        margin-top: 30px;
+        background-color: #1e1e1e;
+        border-radius: 15px;
+        padding: 20px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    thead tr {
+        background-color: #1db954;
+        color: #000;
+        border-bottom: 2px solid #1db954;
+    }
+
+    table th, table td {
+        color: #ffffff;
+        border: 1px solid #1db954;
+        padding: 12px;
+        text-align: left;
+    }
+
+    .btn-primary {
+        background-color: #1db954;
+        border-color: #1db954;
+    }
+
+        .btn-primary:hover {
+            background-color: #1ed760;
+            border-color: #1ed760;
+        }
+
+    .btn-success {
+        background-color: #1db954;
+        border-color: #1db954;
+        color: #000;
+    }
+
+        .btn-success[disabled] {
+            background-color: #444 !important;
+            border-color: #444 !important;
+            color: #aaa;
+        }
+
+    .no-tickets {
+        margin-top: 40px;
+        background-color: #2a2a2a;
+        padding: 20px;
+        border-radius: 10px;
+        color: #ddd;
+        text-align: center;
+        font-size: 1.2rem;
+    }
+
+    a {
+        color: #1db954;
+        text-decoration: none;
+    }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+    /* Spotify-style profile nav */
+    .profile-nav {
+        background-color: #1e1e1e;
+        border-radius: 15px;
+        padding: 20px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+        width: 100%;
+        margin-top: 20px;
+    }
+
+        .profile-nav .nav-link {
+            color: #fff;
+            background-color: transparent;
+            padding: 12px 20px;
+            margin: 5px 0;
+            border-radius: 8px;
+            transition: background-color 0.3s, color 0.3s;
+            font-weight: 500;
+            font-size: 1.05rem;
+        }
+
+            .profile-nav .nav-link:hover {
+                background-color: #1db954;
+                color: #000;
+                text-decoration: none;
+            }
+
+        .profile-nav .active {
+            background-color: #1db954;
+            color: #000;
+            font-weight: bold;
+        }
+</style>
+
+<div class="profile-nav">
+    <ul class="nav flex-column">
+        <li class="nav-item">
+            <a class="nav-link @ManageNavPages.IndexNavClass(ViewContext)" id="profile" asp-page="./Index"> Profile</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link @ManageNavPages.EmailNavClass(ViewContext)" id="email" asp-page="./Email">Email</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link @ManageNavPages.ChangePasswordNavClass(ViewContext)" id="change-password" asp-page="./ChangePassword">Password</a>
+        </li>
+        @if (hasExternalLogins)
+        {
+            <li class="nav-item">
+                <a class="nav-link @ManageNavPages.ExternalLoginsNavClass(ViewContext)" id="external-login" asp-page="./ExternalLogins">External Logins</a>
+            </li>
+        }
+        <li class="nav-item">
+            <a class="nav-link @ManageNavPages.TwoFactorAuthenticationNavClass(ViewContext)" id="two-factor" asp-page="./TwoFactorAuthentication">Two-Factor</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link @ManageNavPages.PersonalDataNavClass(ViewContext)" id="personal-data" asp-page="./PersonalData">Personal Data</a>
+        </li>
+    </ul>
+</div>
