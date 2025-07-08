@@ -10,7 +10,7 @@ public class ApplicationDbContext : IdentityDbContext
         : base(options)
     {
     }
-    public DbSet<Concert> Concerts { get; set; }
+    public DbSet<Concert> Concerts { get; set; } //
     public DbSet<Song> Songs { get; set; }
 
 
